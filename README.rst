@@ -4,12 +4,12 @@ FSMEDHRO Core
 
 Dies ist die Grundlage für Webseite des Fachschaftsrates der medizinischen
 Fakultät der Uni Rostock. Hier wird definiert, was ein ``FachschaftsUser``, ein
-``Studiengang`` und ein ``Studienabschnitt`` ist und welche ``Gender`` es gibt.
+``Studiengang``, ein ``Studienabschnitt`` und was ein ``Gender`` ist.
 
 Installation
 ------------
 
-1. Fügt ``fsmedhro_core`` wie folgt zu deinen ``INSTALLED_APPS`` hinzu::
+1. Füge ``fsmedhro_core`` wie folgt zu deinen ``INSTALLED_APPS`` hinzu::
 
     INSTALLED_APPS = [
         ...
@@ -18,7 +18,7 @@ Installation
 
 2. Erzeuge die Models mittels ``python manage.py migrate``
 
-3. Fügt das LDAP-Backend zu ``AUTHENTICATION_BACKENDS`` hinzu::
+3. Füge das LDAP-Backend zu ``AUTHENTICATION_BACKENDS`` hinzu::
 
     AUTHENTICATION_BACKENDS = [
         'django.contrib.auth.backends.ModelBackend',
