@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Fachschaft-neues Profil{% endblock %}
+
+
+{% block site_heading %}
+  <h1>Neues Profil (Fachschaft)</h1>
+{% endblock %}
+
+{% block site_content %}
+<section>
+    Fachschafts-Profil bearbeiten. Manche Anwendungen auf dieser Homepage beziehen sich auf Informationen aus diesem Profil.<br>
+Name, Vorname und eMail werden automatisch mit der Uni abgeglichen. Zum Ändern bitte Studiendekanat ansprechen
+</section>
+<form method="post" action="">
+    {% csrf_token %}
+    <table>
+    {{ fuform.as_table }}
+    </table>
+    <button>speichern</button>
+</form>
+{% endblock %}
