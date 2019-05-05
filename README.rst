@@ -9,7 +9,7 @@ Fakultät der Uni Rostock. Hier wird definiert, was ein `FachschaftsUser`, ein
 Installation
 ------------
 
-1. Fügt `fsmedhro_core` wie folgt zu deinen `INSTALLED_APPS` hinzu:
+1. Fügt `fsmedhro_core` wie folgt zu deinen `INSTALLED_APPS` hinzu::
 
     INSTALLED_APPS = [
         ...
@@ -18,7 +18,7 @@ Installation
 
 2. Erzeuge die Models mittels `python manage.py migrate`
 
-3. Fügt das LDAP-Backend zu `AUTHENTICATION_BACKENDS` hinzu:
+3. Fügt das LDAP-Backend zu `AUTHENTICATION_BACKENDS` hinzu::
 
     AUTHENTICATION_BACKENDS = [
         'django.contrib.auth.backends.ModelBackend',
