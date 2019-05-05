@@ -14,7 +14,12 @@ setup(
     include_package_data=True,
     description='Basisapp für die Webseite des FSR der Uni Rostock',
     long_description=README,
+    license='MIT License',
     url='https://github.com/hutchison/django-fsmedhro-core',
+    install_requires=[
+        'Django>=2.1',
+    ],
+    python_requires=">=3.5",
     author='Martin Darmüntzel',
     author_email='martin@trivialanalog.de',
     classifiers=[
