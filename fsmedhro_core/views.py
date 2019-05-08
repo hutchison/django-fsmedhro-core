@@ -1,62 +1,56 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
+from django.views import View
 
 from .forms import FachschaftUserForm
 
 
-def index(request):
-    messages.info(request, 'Info: Diese Seite befindet sich noch im Aufbau...')
-    return render(request, 'fsmedhro_core/index.html')
-
-
-@login_required
-def user_profile(request, username):
-    p_user = get_object_or_404(User, username=username)
-
-    try:
-        f_user = p_user.fachschaftuser
-    except ObjectDoesNotExist:
-        f_user = None
-        if request.user == p_user:
-            # wenn eigenes profil, aber noch kein Fachschaft-Profil, dann
-            # bearbeiten/hinzufügen
-            return redirect('fachschaft:fsmedhro_user_edit')
-
-    context = {'p_user': p_user, 'f_user': f_user}
-
-    return render(request, 'fsmedhro_core/user_profile.html', context)
-
-
-@login_required
-def user_self(request):
-    return redirect('user_profile', username=request.user.username)
-
-
-@login_required
-def user_edit(request):
-    if request.method == 'POST':
+@method_decorator(login_required, name='dispatch')
+class FachschaftUserEdit(View):
+    def get(self, request):
         try:
             # FachschaftUser bereits vorhanden?
-            fuform = FachschaftUserForm(
+            form = FachschaftUserForm(instance=request.user.fachschaftuser)
+        except ObjectDoesNotExist:
+            form = FachschaftUserForm()
+
+        context = {
+            'form': form,
+        }
+
+        return render(request, 'fsmedhro_core/user_edit.html', context)
+
+    def post(self, request):
+        try:
+            form = FachschaftUserForm(
                 data=request.POST,
-                instance=request.user.fachschaftuser
+                instance=request.user.fachschaftuser,
             )
         except ObjectDoesNotExist:
-            fuform = FachschaftUserForm(data=request.POST)
+            form = FachschaftUserForm(
+                data=request.POST,
+            )
 
-        if fuform.is_valid():
-            fuser = fuform.save(commit=False)
-            fuser.user = request.user
-            fuser.save()
-            return redirect('user_profile', username=request.user.username)
-    else:
+        if form.is_valid():
+            fachschaftuser = form.save(commit=False)
+            fachschaftuser.user = request.user
+            fachschaftuser.save()
+
+        return redirect('fsmedhro_core:detail')
+
+
+@method_decorator(login_required, name='dispatch')
+class FachschaftUserDetail(View):
+    def get(self, request):
         try:
-            # FachschaftUser bereits vorhanden?
-            fuform = FachschaftUserForm(instance=request.user.fachschaftuser)
+            fachschaftuser = request.user.fachschaftuser
         except ObjectDoesNotExist:
-            fuform = FachschaftUserForm()
+            return redirect('fsmedhro_core:edit')
 
-    return render(request, 'fsmedhro_core/user_edit.html', {'fuform': fuform})
+        context = {
+            'fachschaftuser': fachschaftuser,
+        }
+
+        return render(request, 'fsmedhro_core/user_detail.html', context)
