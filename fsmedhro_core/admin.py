@@ -12,12 +12,27 @@ class FachschaftUserAdmin(admin.ModelAdmin):
     model = FachschaftUser
     fields = [
         'nickname',
-        'user.first_name',
-        'user.last_name',
+        'user',
         'gender',
         'studiengang',
         'studienabschnitt',
     ]
+    list_display = (
+        'nickname',
+        '__str__',
+        'gender',
+        'studiengang',
+        'studienabschnitt',
+    )
+    search_fields = [
+        'nickname',
+        'user',
+    ]
+    list_filter = (
+        'gender',
+        'studiengang',
+        'studienabschnitt',
+    )
 
 
 class GenderAdmin(admin.ModelAdmin):
