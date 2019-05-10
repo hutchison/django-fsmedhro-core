@@ -18,6 +18,7 @@ setup(
     url='https://github.com/hutchison/django-fsmedhro-core',
     install_requires=[
         'Django>=2.1',
+        'django-crispy-forms',
     ],
     python_requires=">=3.5",
     author='Martin Darmüntzel',
