@@ -9,10 +9,10 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-fsmedhro-core',
-    version='0.2',
+    version='0.2.1',
     packages=find_packages(),
     include_package_data=True,
-    description='Basisapp für die Webseite des FSR der Uni Rostock',
+    description='Basisapp für die Webseite des FSR Medizin der Uni Rostock',
     long_description=README,
     license='MIT License',
     url='https://github.com/hutchison/django-fsmedhro-core',
