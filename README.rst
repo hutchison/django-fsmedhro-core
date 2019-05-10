@@ -24,10 +24,3 @@ Installation
         'django.contrib.auth.backends.ModelBackend',
         'fsmedhro_core.backends.auth.LDAPUniRostock',
     ]
-
-
-zu erledigen
-------------
-
-* Views und Templates für ``FachschaftsUser`` erstellen
-* URLs klarmachen
