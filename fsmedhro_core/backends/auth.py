@@ -1,5 +1,6 @@
 import logging
 from ldap3 import Server, Connection, ALL_ATTRIBUTES
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 
@@ -86,8 +87,16 @@ class LDAPUniRostock:
 
     def is_valid(self, ldap_user):
         """
-        Es werden nur Studenten von der Medizinischen Fakultät akzeptiert.
+        Es werden nur Studenten von der Medizinischen Fakultät akzeptiert,
+        außer die Accounts mit Ausnahmeregelungen in
+        settings.FSRMED_AUTH_EXCEPTIONS.
         """
+        try:
+            if ldap_user.uid.value in settings.FSRMED_AUTH_EXCEPTIONS:
+                return True
+        except AttributeError:
+            pass
+
         ldap_auth_filter = {
             'employeeType': 's',
             'uniRFaculty': '03',
