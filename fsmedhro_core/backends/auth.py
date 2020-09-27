@@ -18,6 +18,7 @@ class LDAPUniRostock:
         uid_qualifier = f'uid={username}'
         user_dn = f'{uid_qualifier},{self.BASE_DN}'
 
+        logger.debug(f'Trying to authenticate with user_dn: {user_dn}')
         conn = Connection(self.server, user_dn, password)
 
         """
@@ -40,7 +41,9 @@ class LDAPUniRostock:
                 attributes=ALL_ATTRIBUTES
             )
             ldap_user = conn.entries[0]
+            logger.debug(f'Got LDAP User: {ldap_user}')
         else:
+            logger.debug('Could not authenticate. Unsuccessful bind.')
             messages.warning(
                 request,
                 'Authentifizierung bei der Uni fehlgeschlagen – '
@@ -92,6 +95,9 @@ class LDAPUniRostock:
         settings.FSRMED_AUTH_EXCEPTIONS.
         """
         try:
+            logger.debug(
+                f'Current auth exceptions: {settings.FSRMED_AUTH_EXCEPTIONS}'
+            )
             if ldap_user.uid.value in settings.FSRMED_AUTH_EXCEPTIONS:
                 return True
         except AttributeError:
@@ -105,6 +111,10 @@ class LDAPUniRostock:
 
         for key, value in ldap_auth_filter.items():
             if ldap_user[key].value != value:
+                logger.warning(
+                    f'Invalid user {ldap_user.uid} because of {key} '
+                    f'(should be {value} but is {ldap_user[key].value})'
+                )
                 return False
         else:
             return True
