@@ -25,9 +25,9 @@ class LDAPUniRostock:
         zu binden. Wenn es hierbei keine Exception gibt, dann ist der
         Benutzer gültig.
         """
-        bind_succesful = conn.bind()
+        bind_successful = conn.bind()
 
-        if bind_succesful:
+        if bind_successful:
             """
             Wenn wir uns erfolgreich binden konnten, dann holen wir uns vom
             LDAP-Server alle Informationen um unseren eigenen Nutzer zu
