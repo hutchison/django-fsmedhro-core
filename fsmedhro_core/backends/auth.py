@@ -15,8 +15,8 @@ class LDAPUniRostock:
 
     def authenticate(self, request, username, password):
         username = username.lower()
-        uid_qualifier = 'uid={}'.format(username)
-        user_dn = uid_qualifier + ',' + self.BASE_DN
+        uid_qualifier = f'uid={username}'
+        user_dn = f'{uid_qualifier},{self.BASE_DN}'
 
         conn = Connection(self.server, user_dn, password)
 
@@ -33,7 +33,7 @@ class LDAPUniRostock:
             LDAP-Server alle Informationen um unseren eigenen Nutzer zu
             befüllen.
             """
-            uid_search_term = '({})'.format(uid_qualifier)
+            uid_search_term = f'({uid_qualifier})'
             conn.search(
                 self.BASE_DN,
                 uid_search_term,
