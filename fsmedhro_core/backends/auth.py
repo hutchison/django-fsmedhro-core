@@ -83,8 +83,8 @@ class LDAPUniRostock:
         else:
             messages.warning(
                 request,
-                'Heute leider nur für <del>Stammgäste</del> '
-                'Studenten der med. Faktultät.'
+                "Zutritt gibt's leider nur für Studenten "
+                "der medizinischen Fakultät."
             )
             return None
 
