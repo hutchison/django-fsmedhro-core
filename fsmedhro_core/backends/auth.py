@@ -106,7 +106,7 @@ class LDAPUniRostock:
         ldap_auth_filter = {
             'employeeType': 's',
             'uniRFaculty': '03',
-            'gidNumber': '97'
+            'gidNumber': 97,
         }
 
         for key, value in ldap_auth_filter.items():
