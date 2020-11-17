@@ -22,7 +22,7 @@ class Studiengang(models.Model):
     """
     z.B. "Humanmedizin", "Zahnmedizin", ...
     """
-    bezeichnung = models.CharField(max_length=100)
+    bezeichnung = models.CharField(max_length=100, unique=True)
     studienabschnitt = models.ManyToManyField(
         Studienabschnitt,
         blank=True,
