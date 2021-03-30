@@ -109,13 +109,20 @@ class LDAPUniRostock:
             'gidNumber': 97,
         }
 
-        for key, value in ldap_auth_filter.items():
-            if ldap_user[key].value != value:
-                logger.warning(
-                    f'Invalid user {ldap_user.uid} because of {key} '
-                    f'(should be {value} but is {ldap_user[key].value})'
-                )
-                return False
+        invalid_user_warning_msg = (
+            f'Invalid user {ldap_user.uid} because of {key} '
+            f'(should be {target_value} but is {ldap_user[key].value})'
+        )
+
+        for key, target_value in ldap_auth_filter.items():
+            if type(ldap_user[key].value) == list:
+                if target_value not in ldap_user[key].value:
+                    logger.warning(invalid_user_warning_msg)
+                    return False
+            else:
+                if target_value != ldap_user[key].value:
+                    logger.warning(invalid_user_warning_msg)
+                    return False
         else:
             return True
 
