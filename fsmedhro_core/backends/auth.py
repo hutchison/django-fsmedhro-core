@@ -104,23 +104,30 @@ class LDAPUniRostock:
             pass
 
         ldap_auth_filter = {
-            'employeeType': 's',
-            'uniRFaculty': '03',
-            'gidNumber': 97,
+            'employeeType': {'s', 'si'},
+            'uniRFaculty': {'03'},
+            'gidNumber': {97},
         }
 
-        for key, target_value in ldap_auth_filter.items():
+        """
+        Es wird jedes Filterkriterium auf Gültigkeit überprüft.
+        Der Wert vom ldap_user für die relevanten Schlüssel aus ldap_auth_filter muss
+        in den dazugehörigen Werten aus ldap_auth_filter vorkommen.
+        """
+        for key, target_values in ldap_auth_filter.items():
+            v = ldap_user[key].value
             invalid_user_warning_msg = (
                 f'Invalid user {ldap_user.uid} because of {key} '
-                f'(should be {target_value} but is {ldap_user[key].value})'
+                f'(should be in {target_values} but is {v})'
             )
 
-            if type(ldap_user[key].value) == list:
-                if target_value not in ldap_user[key].value:
+            if type(v) == list:
+                vs = set(v)
+                if not vs <= target_values:
                     logger.warning(invalid_user_warning_msg)
                     return False
             else:
-                if target_value != ldap_user[key].value:
+                if v not in target_values:
                     logger.warning(invalid_user_warning_msg)
                     return False
         else:
