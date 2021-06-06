@@ -121,15 +121,21 @@ class LDAPUniRostock:
                 f'(should be in {target_values} but is {v})'
             )
 
-            if type(v) == list:
-                vs = set(v)
-                if not vs <= target_values:
-                    logger.warning(invalid_user_warning_msg)
-                    return False
-            else:
-                if v not in target_values:
-                    logger.warning(invalid_user_warning_msg)
-                    return False
+            """
+            Es könnte sein, dass ein ';' die verschiedenen employeeTypes trennt.
+            Wenn kein ';' enthalten ist, dann entsteht nur eine 1-elem. Menge. Auch ok.
+            """
+            vs = set(v.split(';'))
+
+            """
+            Die Daten vom User müssen in allen Punkten mind. eine Übereinstimmung
+            mit den Zieldaten haben, also z.B. wenn der Nutzer den employeeType
+            'mi;si' hat (deswegen der split oben), dann soll der Nutzer sich einloggen
+            können.
+            """
+            if not vs & target_values:
+                logger.warning(invalid_user_warning_msg)
+                return False
         else:
             return True
 
