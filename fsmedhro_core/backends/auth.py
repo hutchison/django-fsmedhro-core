@@ -121,11 +121,13 @@ class LDAPUniRostock:
                 f'(should be in {target_values} but is {v})'
             )
 
-            """
-            Es könnte sein, dass ein ';' die verschiedenen employeeTypes trennt.
-            Wenn kein ';' enthalten ist, dann entsteht nur eine 1-elem. Menge. Auch ok.
-            """
-            vs = set(v.split(';'))
+            if type(v) == int:
+                vs = {v}
+            elif type(v) == str:
+                # Es könnte sein, dass ';' die verschiedenen employeeTypes trennt.
+                vs = set(v.split(';'))
+            else:
+                vs = set(v)
 
             """
             Die Daten vom User müssen in allen Punkten mind. eine Übereinstimmung
