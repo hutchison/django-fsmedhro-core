@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-fsmedhro-core',
-    version='0.2.13',
+    version='0.2.14',
     packages=find_packages(),
     include_package_data=True,
     description='Basisapp für die Webseite des FSR Medizin der Uni Rostock',
