@@ -26,7 +26,8 @@ class FachschaftUserAdmin(admin.ModelAdmin):
     )
     search_fields = [
         'nickname',
-        'user',
+        'user__first_name',
+        'user__last_name',
     ]
     list_filter = (
         'gender',
