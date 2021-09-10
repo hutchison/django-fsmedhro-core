@@ -1,12 +1,17 @@
+import logging
+
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail, send_mass_mail
+from django.core.mail import send_mail, EmailMessage
 from django.shortcuts import redirect, render
 from django.views import View
 
 from .forms import FachschaftUserForm
 from .models import Studienabschnitt, Studiengang, Gender, FachschaftUser
+
+
+logger = logging.getLogger(__name__)
 
 
 class FachschaftUserEdit(LoginRequiredMixin, View):
@@ -114,6 +119,11 @@ class Rundmail(UserPassesTestMixin, View):
                 recipient_list=[settings.DEFAULT_FROM_EMAIL],
                 fail_silently=False,
             )
+            logger.info(
+                f'{request.user} verschickte Testmail\n' +
+                f'{betreff=}\n' +
+                f'{text=}'
+            )
             context['testmail_verschickt'] = True
             context['anzahl_verschickt'] = anzahl_verschickt
 
@@ -124,24 +134,33 @@ class Rundmail(UserPassesTestMixin, View):
                 studienabschnitt__in=studienabschnitte,
                 gender__in=gender,
             ).order_by('user__email')
+            empfaenger_adressen = [empf.user.email for empf in empfaenger]
 
-            mails = [
-                (betreff, text, settings.DEFAULT_FROM_EMAIL, [empf.user.email])
-                for empf in empfaenger
-            ]
+            mails = EmailMessage(
+                subject=betreff,
+                body=text,
+                bcc=empfaenger_adressen,
+            )
 
-            anzahl_verschickt = send_mass_mail(mails)
+            mails.send()
+            logger.info(
+                f'{request.user} verschickte Rundmail\n' +
+                f'{betreff=}\n' +
+                f'{text=}\n' +
+                f'an' +
+                ', '.join(empfaenger_adressen)
+            )
 
-            context['empfaenger'] = empfaenger
-            context['anzahl_verschickt'] = anzahl_verschickt
+            context['anzahl_verschickt'] = len(empfaenger)
 
             sicherheitsnachricht = (
                 f'Die folgende Nachricht:\n\n' +
                 f'Betreff: {betreff}\n' +
                 f'Text:\n' +
                 f'{text}\n\n' +
-                f'wurde an {anzahl_verschickt} Personen verschickt:\n\n' +
-                '\n'.join(empf.user.email for empf in empfaenger)
+                f'wurde von {request.user} '
+                f'an {len(empfaenger)} Personen verschickt:\n\n' +
+                '\n'.join(empfaenger_adressen)
             )
             send_mail(
                 subject='Rundmail verschickt: ' + betreff,
