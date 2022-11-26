@@ -58,7 +58,7 @@ class Gender(models.Model):
 class FachschaftUser(models.Model):
     """
     Extends django.contrib.auth.models.User
-    FachschaftUser = "StudentInnen allgemein"
+    FachschaftUser = "Student:innen allgemein"
     """
     user = models.OneToOneField(
         User,
