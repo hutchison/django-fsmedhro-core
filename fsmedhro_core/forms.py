@@ -13,4 +13,9 @@ class UserForm(ModelForm):
 class FachschaftUserForm(ModelForm):
     class Meta:
         model = FachschaftUser
-        fields = ['nickname', 'studiengang', 'studienabschnitt', 'gender']
+        fields = [
+            'nickname',
+            'studiengang',
+            'studienabschnitt',
+            'gender',
+        ]
