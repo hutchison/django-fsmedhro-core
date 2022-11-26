@@ -1,5 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
+
+
+telefon_regex = RegexValidator(
+    regex=r'^\+\d{9,15}$',
+    message="Telefonnummer muss von folgendem Format sein: '+4938149444614'. "
+    "Es sind bis zu 15 Ziffern erlaubt."
+)
 
 
 class Studienabschnitt(models.Model):
