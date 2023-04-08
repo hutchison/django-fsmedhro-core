@@ -4,7 +4,7 @@ from django.core.validators import RegexValidator
 
 
 telefon_regex = RegexValidator(
-    regex=r'^\+\d{9,15}$',
+    regex=r"^\+\d{9,15}$",
     message="Telefonnummer muss von folgendem Format sein: '+4938149444614'. "
     "Es sind bis zu 15 Ziffern erlaubt."
 )
@@ -21,9 +21,9 @@ class Studienabschnitt(models.Model):
         return self.bezeichnung
 
     class Meta:
-        verbose_name = 'Studienabschnitt/Semester'
-        verbose_name_plural = 'Studienabschnitte/Semester'
-        ordering = ['sortierung']
+        verbose_name = "Studienabschnitt/Semester"
+        verbose_name_plural = "Studienabschnitte/Semester"
+        ordering = ["sortierung"]
 
 
 class Studiengang(models.Model):
@@ -34,16 +34,16 @@ class Studiengang(models.Model):
     studienabschnitt = models.ManyToManyField(
         Studienabschnitt,
         blank=True,
-        related_name='studiengang'
+        related_name="studiengang"
     )
 
     def __str__(self):
         return self.bezeichnung
 
     class Meta:
-        verbose_name = 'Studiengang'
-        verbose_name_plural = 'Studiengänge'
-        ordering = ['bezeichnung']
+        verbose_name = "Studiengang"
+        verbose_name_plural = "Studiengänge"
+        ordering = ["bezeichnung"]
 
 
 class Gender(models.Model):
@@ -58,9 +58,9 @@ class Gender(models.Model):
         return self.bezeichnung
 
     class Meta:
-        verbose_name = 'Gender/Geschlecht'
-        verbose_name_plural = 'Gender/Geschlechter'
-        ordering = ['bezeichnung']
+        verbose_name = "Gender/Geschlecht"
+        verbose_name_plural = "Gender/Geschlechter"
+        ordering = ["bezeichnung"]
 
 
 class FachschaftUser(models.Model):
@@ -71,7 +71,7 @@ class FachschaftUser(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.PROTECT,
-        related_name='fachschaftuser',
+        related_name="fachschaftuser",
     )
     gender = models.ForeignKey(Gender, on_delete=models.PROTECT)
     studienabschnitt = models.ForeignKey(
@@ -96,4 +96,4 @@ class FachschaftUser(models.Model):
     class Meta:
         verbose_name = 'StudentIn'
         verbose_name_plural = 'StudentInnen'
-        ordering = ['nickname']
+        ordering = ["nickname"]

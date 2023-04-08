@@ -52,10 +52,10 @@ class FachschaftUserDetail(LoginRequiredMixin, View):
         try:
             fachschaftuser = request.user.fachschaftuser
         except ObjectDoesNotExist:
-            return redirect('fsmedhro_core:edit')
+            return redirect("fsmedhro_core:edit")
 
         context = {
-            'fachschaftuser': fachschaftuser,
+            "fachschaftuser": fachschaftuser,
         }
 
         return render(request, 'fsmedhro_core/user_detail.html', context)
@@ -67,9 +67,9 @@ class Rundmail(UserPassesTestMixin, View):
 
     def get_context_data(self):
         context = {
-            'studienabschnitte': Studienabschnitt.objects.all(),
-            'studiengaenge': Studiengang.objects.all(),
-            'gender': Gender.objects.all(),
+            "studienabschnitte": Studienabschnitt.objects.all(),
+            "studiengaenge": Studiengang.objects.all(),
+            "gender": Gender.objects.all(),
         }
         return context
 
@@ -81,36 +81,36 @@ class Rundmail(UserPassesTestMixin, View):
         context = self.get_context_data()
         errors = []
 
-        studiengaenge = list(map(int, request.POST.getlist('studiengang', [])))
-        context['gew_studiengaenge'] = studiengaenge
+        studiengaenge = list(map(int, request.POST.getlist("studiengang", [])))
+        context["gew_studiengaenge"] = studiengaenge
         if not studiengaenge:
             errors.append("Es wurde kein Studiengang ausgewählt.")
 
-        studienabschnitte = list(map(int, request.POST.getlist('studienabschnitt', [])))
-        context['gew_studienabschnitte'] = studienabschnitte
+        studienabschnitte = list(map(int, request.POST.getlist("studienabschnitt", [])))
+        context["gew_studienabschnitte"] = studienabschnitte
         if not studienabschnitte:
             errors.append("Es wurde kein Studienabschnitt ausgewählt.")
 
-        gender = list(map(int, request.POST.getlist('gender', [])))
-        context['gew_gender'] = gender
+        gender = list(map(int, request.POST.getlist("gender", [])))
+        context["gew_gender"] = gender
         if not gender:
             errors.append("Es wurde kein Geschlecht ausgewählt.")
 
-        betreff = request.POST.get('email_subject', '')
-        context['betreff'] = betreff
+        betreff = request.POST.get("email_subject", "")
+        context["betreff"] = betreff
         if not betreff:
-            errors.append('Der Betreff fehlt.')
+            errors.append("Der Betreff fehlt.")
 
-        text = request.POST.get('email_text', '')
-        context['text'] = text
+        text = request.POST.get("email_text", "")
+        context["text"] = text
         if not text:
-            errors.append('Der Text fehlt.')
+            errors.append("Der Text fehlt.")
 
-        send_testmail = bool(request.POST.get('send_testmail', False))
+        send_testmail = bool(request.POST.get("send_testmail", False))
 
         if errors:
-            context['errors'] = errors
-            return render(request, 'fsmedhro_core/rundmail.html', context)
+            context["errors"] = errors
+            return render(request, "fsmedhro_core/rundmail.html", context)
         elif send_testmail:
             anzahl_verschickt = send_mail(
                 subject=betreff,
@@ -120,12 +120,12 @@ class Rundmail(UserPassesTestMixin, View):
                 fail_silently=False,
             )
             logger.info(
-                f'{request.user} verschickte Testmail\n' +
-                f'{betreff=}\n' +
-                f'{text=}'
+                f"{request.user} verschickte Testmail\n" +
+                f"{betreff=}\n" +
+                f"{text=}"
             )
-            context['testmail_verschickt'] = True
-            context['anzahl_verschickt'] = anzahl_verschickt
+            context["testmail_verschickt"] = True
+            context["anzahl_verschickt"] = anzahl_verschickt
 
             return render(request, 'fsmedhro_core/rundmail.html', context)
         else:
@@ -133,7 +133,7 @@ class Rundmail(UserPassesTestMixin, View):
                 studiengang__in=studiengaenge,
                 studienabschnitt__in=studienabschnitte,
                 gender__in=gender,
-            ).order_by('user__email')
+            ).order_by("user__email")
             empfaenger_adressen = [empf.user.email for empf in empfaenger]
 
             mails = EmailMessage(
@@ -144,26 +144,26 @@ class Rundmail(UserPassesTestMixin, View):
 
             mails.send()
             logger.info(
-                f'{request.user} verschickte Rundmail\n' +
-                f'{betreff=}\n' +
-                f'{text=}\n' +
-                f'an' +
-                ', '.join(empfaenger_adressen)
+                f"{request.user} verschickte Rundmail\n" +
+                f"{betreff=}\n" +
+                f"{text=}\n" +
+                f"an" +
+                ", ".join(empfaenger_adressen)
             )
 
-            context['anzahl_verschickt'] = len(empfaenger)
+            context["anzahl_verschickt"] = len(empfaenger)
 
             sicherheitsnachricht = (
-                f'Die folgende Nachricht:\n\n' +
-                f'Betreff: {betreff}\n' +
-                f'Text:\n' +
-                f'{text}\n\n' +
-                f'wurde von {request.user} '
-                f'an {len(empfaenger)} Personen verschickt:\n\n' +
-                '\n'.join(empfaenger_adressen)
+                f"Die folgende Nachricht:\n\n" +
+                f"Betreff: {betreff}\n" +
+                f"Text:\n" +
+                f"{text}\n\n" +
+                f"wurde von {request.user} "
+                f"an {len(empfaenger)} Personen verschickt:\n\n" +
+                "\n".join(empfaenger_adressen)
             )
             send_mail(
-                subject='Rundmail verschickt: ' + betreff,
+                subject="Rundmail verschickt: " + betreff,
                 message=sicherheitsnachricht,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[settings.DEFAULT_FROM_EMAIL],
