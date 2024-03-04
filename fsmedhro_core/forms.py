@@ -1,16 +1,19 @@
 from django.contrib.auth.models import User
-from django.forms import ModelForm
+from django import forms
 
-from .models import FachschaftUser
+from .models import (
+    FachschaftUser,
+    Kontaktdaten,
+)
 
 
-class UserForm(ModelForm):
+class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
 
 
-class FachschaftUserForm(ModelForm):
+class FachschaftUserForm(forms.ModelForm):
     class Meta:
         model = FachschaftUser
         fields = [
@@ -19,3 +22,17 @@ class FachschaftUserForm(ModelForm):
             'studienabschnitt',
             'gender',
         ]
+
+
+class KontaktdatenForm(forms.ModelForm):
+    class Meta:
+        model = Kontaktdaten
+        fields = [
+            "fachschaftuser",
+            "adresse",
+            "telefonnummer",
+        ]
+        widgets = {
+            "fachschaftuser": forms.HiddenInput(),
+            "adresse": forms.Textarea(attrs={"rows": 3, "cols": 60}),
+        }
