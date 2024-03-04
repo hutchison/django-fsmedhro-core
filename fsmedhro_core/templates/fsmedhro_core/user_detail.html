@@ -39,5 +39,72 @@
     </table>
     <a class="btn btn-primary" href="{% url 'fsmedhro_core:edit' %}" role="button">Profil bearbeiten</a>
   </div>
+  <div class="col-lg-6 col-md-8">
+  </div>
+</div>
+<div class="row justify-content-center mt-4">
+  <div class="col-lg-4 col-md-6">
+    <h3>Deine aktuellen Kontaktdaten</h3>
+    {% if kontaktdaten %}
+    <table class="table">
+      <tbody>
+        <tr>
+          <th scope="row">Adresse</th>
+          <td style="white-space: pre;">{{ aktuelle_kontaktdaten.adresse }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Telefonnummer</th>
+          <td>{{ aktuelle_kontaktdaten.telefonnummer }}</td>
+        </tr>
+        <tr>
+          <th scope="row">hinzugefügt</th>
+          <td>{{ aktuelle_kontaktdaten.created }} Uhr</td>
+        </tr>
+        <tr>
+          <th scope="row">überprüft</th>
+          {% if aktuelle_kontaktdaten.gecheckt_von and aktuelle_kontaktdaten.gecheckt_datum %}
+          <td class="text-success">{{ aktuelle_kontaktdaten.gecheckt_datum }} Uhr von {{ aktuelle_kontaktdaten.gecheckt_von.get_full_name }}</td>
+          {% else %}
+          <td class="text-danger">noch nicht überprüft</td>
+          {% endif %}
+        </tr>
+      </tbody>
+    </table>
+    {% else %}
+    <p>Aktuell sind keine Kontaktdaten von dir vorhanden.</p>
+    {% endif %}
+    <p>
+      <a class="btn btn-primary" href="{% url 'fsmedhro_core:kontaktdaten_add' %}" role="button">Kontaktdaten hinzufügen</a>
+    </p>
+  </div>
+  <div class="col-lg-6 col-md-8">
+    <h3>Deine bisherigen Kontaktdaten</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Adresse</th>
+          <th>Telefonnummer</th>
+          <th>hinzugefügt</th>
+          <th>überprüft</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for k in kontaktdaten %}
+        <tr>
+          <td style="white-space: pre;">{{ k.adresse }}</td>
+          <td>{{ k.telefonnummer }}</td>
+          <td>{{ k.created }}</td>
+          <td>
+            {% if k.gecheckt_von and k.gecheckt_datum %}
+            <span class="text-success">✓</span>
+            {% else %}
+            <span class="text-danger">✗</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}
