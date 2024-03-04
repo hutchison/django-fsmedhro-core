@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-fsmedhro-core',
-    version='0.2.16',
+    version='0.3.0',
     packages=find_packages(),
     include_package_data=True,
     description='Basisapp für die Webseite des FSR Medizin der Uni Rostock',
@@ -20,6 +20,7 @@ setup(
         'Django>=3.1',
         'django-crispy-forms',
         'ldap3>=2.6',
+        'djangorestframework',
     ],
     python_requires=">=3.9",
     author='Martin Darmüntzel',
