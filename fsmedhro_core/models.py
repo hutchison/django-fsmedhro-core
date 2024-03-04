@@ -94,6 +94,6 @@ class FachschaftUser(models.Model):
         return self.user.get_full_name()
 
     class Meta:
-        verbose_name = 'StudentIn'
-        verbose_name_plural = 'StudentInnen'
+        verbose_name = "Student:in"
+        verbose_name_plural = "Student:innen"
         ordering = ["nickname"]
