@@ -5,6 +5,11 @@ from .models import (
     Gender,
     Studienabschnitt,
     Studiengang,
+    Kontaktdaten,
+)
+
+from .forms import (
+    KontaktdatenForm,
 )
 
 
@@ -52,3 +57,29 @@ class StudiengangAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Studienabschnitt)
+
+
+@admin.register(Kontaktdaten)
+class KontaktdatenAdmin(admin.ModelAdmin):
+    readonly_fields = [
+        "fachschaftuser",
+        "created",
+        "adresse",
+        "telefonnummer",
+    ]
+    fields = [
+        "fachschaftuser",
+        "created",
+        "adresse",
+        "telefonnummer",
+        "gecheckt_von",
+        "gecheckt_datum",
+    ]
+    list_display = [
+        "fachschaftuser",
+        "created",
+        "adresse",
+        "telefonnummer",
+        "gecheckt_von",
+        "gecheckt_datum",
+    ]
